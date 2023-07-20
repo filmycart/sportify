@@ -1,10 +1,9 @@
 <?php
 	$s_config = new Site_Config();
-	if(!empty($admin->id)){
-
+	if(!empty($admin->id)) {
 	    $s_config = $s_config->where(["admin_id" => $admin->id])->one();
 	}else{
-	    $s_config->title = "Welcome";
+	    $s_config->title = "Sportify";
 	    $s_config->tag_line = "A Simple Website";
 	    $s_config->favicon_image_name = "";
 	}

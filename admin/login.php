@@ -1,57 +1,60 @@
-<?php require_once('../private/init.php'); ?>
 
-<?php
-
-$errors = Session::get_temp_session(new Errors());
-$admin = Session::get_session(new Admin());
-
-if(!empty($admin)){
-	Helper::redirect_to("index.php");
-    $admin = $admin->where(["id" => $admin->id])->one();
-}else $admin = new Admin();
-
+<?php 
+	require("common/php/php-login-head.php"); 
 ?>
-
-<?php require("common/php/php-head.php"); ?>
-
-<body>
-
-<div class="dplay-tbl">
-	<div class="dplay-tbl-cell">
-		<div class="item-wrapper one pb-100">
-			<div class="item">
-				<div class="item-inner">
-					<h4 class="item-header">Login</h4>
-					<div class="item-content">
-						<form data-validation="true" action="../private/controllers/admin_login.php" method="post">
-
-							<label>Username</label>
-							<input data-required="true" type="text" class="form-control" name="username"
-								   value="<?php $admin->username; ?>" placeholder="Username">
-
-							<label>Password</label>
-							<input data-required="true" type="password" class="form-control" name="password"
-								   value="<?php $admin->email; ?>" placeholder="Password">
-
-							<div class="btn-wrapper"><button type="submit" class="c-btn mb-10"><b>Login</b></button></div>
-
-							<?php if($errors) echo $errors->format(); ?>
-
-						</form>
-					</div><!--item-content-->
-				</div><!--item-inner-->
-			</div><!--item-->
-		</div><!--item-wrapper-->
-	</div><!--dplay-tbl-cell-->
-</div><!-- dplay-tbl -->
-
-<!-- jQuery library -->
-<script src="plugin-frameworks/jquery-3.2.1.min.js"></script>
-
-
-<!-- Main Script -->
-<script src="common/other/script.js"></script>
-
-
+<body class="hold-transition login-page">
+<div class="login-box">
+  <div class="login-logo">
+    <a href="#"><b>Sport</b>IFY</a>
+  </div>
+  <!-- /.login-logo -->
+  <div class="card">
+    <div class="card-body login-card-body">
+    	<form data-validation="true" action="../private/controllers/admin_login.php" method="POST">
+        <div class="input-group mb-3">
+          <input type="text" name="username" id="username" class="form-control" value="<?php $admin->username; ?>" placeholder="Username">
+          <div class="input-group-append">
+            <div class="input-group-text">
+              <span class="fas fa-envelope"></span>
+            </div>
+          </div>
+        </div>
+        <div class="input-group mb-3">
+          <input type="password" name="password" id="password" class="form-control" value="<?php $admin->email; ?>" placeholder="Password">
+          <div class="input-group-append">
+            <div class="input-group-text">
+              <span class="fas fa-lock"></span>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-4">
+            <button type="submit" class="btn btn-primary btn-block">Sign In</button>
+          </div>
+		  <?php if($errors) echo $errors->format(); ?>
+          <!-- /.col -->
+        </div>
+      </form>
+      <p class="mb-1">
+        <a href="forgot-password.php">Forgot Password</a>
+      </p>
+      <p class="mb-0">
+        <a href="register.php" class="text-center">Register</a>
+      </p>
+    </div>
+    <!-- /.login-card-body -->
+  </div>
+</div>
+<!-- /.login-box -->
+<!-- jQuery -->
+<script src="plugins/jquery/jquery.min.js"></script>
+<!-- Bootstrap 4 -->
+<script src="plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+<!-- AdminLTE App -->
+<script src="dist/js/adminlte.min.js"></script>
 </body>
 </html>
+<!--
+	<script src="plugin-frameworks/jquery-3.2.1.min.js"></script>
+	<script src="common/other/script.js"></script>
+-->

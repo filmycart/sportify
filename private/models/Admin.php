@@ -22,9 +22,9 @@ class Admin extends Util{
         $admin_frm_db = $this->where(["username" => $this->username])->one();
 
         if(!empty($admin_frm_db)) {
-           /* if(password_verify($this->password, $admin_frm_db->password)) {
+            if(password_verify($this->password, $admin_frm_db->password)) {
                 return $admin_frm_db;
-            }*/
+            }
 
             if($this->password == $admin_frm_db->password){
                 return $admin_frm_db;
@@ -33,6 +33,21 @@ class Admin extends Util{
         return null;
     }
 
+    public function verify_register() {
+
+        $admin_frm_db = $this->where(["username" => $this->username])->one();
+
+        if(!empty($admin_frm_db)) {
+            if(password_verify($this->password, $admin_frm_db->password)) {
+                return $admin_frm_db;
+            }
+
+            if($this->password == $admin_frm_db->password){
+                return $admin_frm_db;
+            }
+        }
+        return null;
+    }
 
     public function validate(){
         $errors = parent::validate();
@@ -47,6 +62,4 @@ class Admin extends Util{
         }
         return $errors;
     }
-    
-
 }

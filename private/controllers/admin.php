@@ -37,7 +37,7 @@
         if($errors->is_empty()){
             $db_admin = $admin->where(["id" => $admin->id])->one();
 
-            //if(password_verify($admin->password, $db_admin->password)){
+            if(password_verify($admin->password, $db_admin->password)) {
 
                 $new_admin = clone $admin;
                 $new_admin->id = null;
@@ -45,7 +45,7 @@
                 
                 if($new_admin->where(["id" => $admin->id])->update()) $message->set_message("Profile Successfully Updated");
                 else $errors->add_error("Something Went Wrong. Please Try Again.");
-            //}else $errors->add_error("Wrong Password.");
+            }else $errors->add_error("Wrong Password.");
         }
 
         $type["type"] = "admin_credentials";
