@@ -2,6 +2,10 @@
 
 <?php
 
+/*print"<pre>";
+print_r($_POST);
+exit;*/
+
 if (Helper::is_post()) {
     $admin = new Admin();
     $s_config = new Site_Config();
@@ -12,7 +16,7 @@ if (Helper::is_post()) {
     $admin->password = $_POST['userPassword'];
 
     $errors = new Errors();
-/*    if(empty($admin->displayname)){
+    if(empty($admin->displayname)){
         $errors->add_error("Full Name can't be blank");
     }
 
@@ -26,7 +30,7 @@ if (Helper::is_post()) {
 
     if(empty($admin->password)){
         $errors->add_error("Password can't be blank");
-    }*/
+    }
 
     $success = false;
     $id = "";
@@ -39,7 +43,6 @@ if (Helper::is_post()) {
     } 
 
     if($errors->is_empty()) {
-        $id = $admin->save();
         $adminSession->id = (int) $id;
         $adminSession->password = password_hash($admin->password, PASSWORD_BCRYPT);
         $adminSession->email = $admin->email;

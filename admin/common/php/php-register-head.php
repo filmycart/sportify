@@ -28,7 +28,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <!--   <title><?=($s_config->title)?$s_config->title:''?> - <?=($s_config->tag_line)?$s_config->tag_line:''?></title>
   -->
-  <title>Login</title>
+  <title>Register</title>
   <!-- Google Font: Source Sans Pro -->
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
   <!-- Font Awesome -->
