@@ -12,7 +12,7 @@ if (Helper::is_post()) {
     $admin->password = $_POST['userPassword'];
 
     $errors = new Errors();
-/*    if(empty($admin->displayname)){
+    if(empty($admin->displayname)){
         $errors->add_error("Full Name can't be blank");
     }
 
@@ -26,7 +26,7 @@ if (Helper::is_post()) {
 
     if(empty($admin->password)){
         $errors->add_error("Password can't be blank");
-    }*/
+    }
 
     $success = false;
     $id = "";
@@ -61,6 +61,7 @@ if (Helper::is_post()) {
         }
 
         Session::set_session($adminSession);
+        Session::set_session($s_config);
         $success = true;
     }
 

@@ -11,7 +11,7 @@
     <div class="card-body register-card-body">
       <p class="login-box-msg">Register</p>
       <form data-validation="true" action="../private/controllers/admin_register.php" name="frmAdminUsrRegister" id="frmAdminUsrRegister" method="POST">  
-        <div class="input-group mb-3" id="input-group-error">
+        <div class="input-group mb-3">
           <select id="userType" name="userType" class="form-control">
               <option>Admin</option>
               <option>Supervisor</option>
@@ -63,15 +63,14 @@
           </div>
         </div>
         <div class="row">
-          <div class="col-8">
-            <div class="icheck-primary" id="input-group-error">
-              <input type="checkbox" id="agreeTerms" name="terms" value="agree">
-              <label for="agreeTerms">
-               I agree to the <a href="#">terms</a>
-              </label>
+          <div class="icheck-primary" id="input-group-error">
+            <div class="form-group mb-0">
+              <div class="custom-control custom-checkbox">
+                &nbsp;&nbsp;<input type="checkbox" name="terms" class="custom-control-input" id="exampleCheck1">
+                <label class="custom-control-label" for="exampleCheck1">I agree to the <a href="#">Terms</a>.</label>
+              </div>
             </div>
           </div>
-          <!-- /.col -->
           <div class="col-4">
             <button type="submit" class="btn btn-primary btn-block">Register</button>
           </div>
@@ -89,24 +88,17 @@
   </div><!-- /.card -->
 </div>
 <!-- /.register-box -->
-<!-- jQuery -->
-<script src="plugins/jquery/jquery.min.js"></script>
-<!-- Bootstrap 4 -->
-<script src="plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
-<!-- AdminLTE App -->
-<script src="dist/js/adminlte.min.js"></script>
-</body>
-</html>
-
-<!-- jQuery -->
-<!--         <script src="../admin/plugins/jquery/jquery.min.js"></script>
- -->        <!-- jquery-validation -->
-<script src="../admin/plugins/jquery-validation/jquery.validate.min.js"></script>
-<script src="../admin/plugins/jquery-validation/additional-methods.min.js"></script>
-<script>
+  <!-- jQuery -->
+  <script src="plugins/jquery/jquery.min.js"></script>
+  <!-- Bootstrap 4 -->
+  <script src="plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+  <!-- AdminLTE App -->
+  <script src="dist/js/adminlte.min.js"></script>
+  <script src="../admin/plugins/jquery-validation/jquery.validate.min.js"></script>
+  <script src="../admin/plugins/jquery-validation/additional-methods.min.js"></script>
+  <script>
     $(document).ready(function () {
-      $("form").submit(function (event) {
-        $('#frmAdminUsrRegister').validate({
+      $("form[name='frmAdminUsrRegister']").validate({
             rules: {
                 userFullName: {
                     required: true,
@@ -115,208 +107,78 @@
                 },
                 userLoginName: {
                     required: true,
-                    minlength: 10,
+                    minlength: 5,
                     maxlength: 50
                 },
                 userEmail: {
                     required: true,
-                    minlength: 10,
-                    maxlength: 50
+                    minlength: 5,
+                    maxlength: 50,
+                    email: true
                 },
                 userPassword: {
                     required: true,
-                    minlength: 10,
+                    minlength: 5,
                     maxlength: 50
                 },
                 userCpassword: {
                     required: true,
-                    minlength: 10,
-                    maxlength: 50
+                    minlength: 5,
+                    maxlength: 50,
+                    equalTo: "#userPassword"
+                },
+                terms: {
+                  required: true
                 },
             },
             messages: {
                 userFullName: {
-                    required: "Enter Full Name.",
-                    minlength: "Title should be minimum of 5 chanracters.",
+                    required: "Please Enter Admin User Full Name.",
+                    minlength: "Title should be minimum of 5 characters.",
                     maxlength: "Title should should not be beyond 50 characters."
                 },
                 userLoginName: {
-                    required: "Enter Login Name.",
-                    minlength: "Title should be minimum of 5 chanracters.",
+                    required: "Please Enter Admin User Login Name.",
+                    minlength: "Title should be minimum of 5 characters.",
                     maxlength: "Title should should not be beyond 50 characters."
                 },
                 userEmail: {
-                    required: "Enter E-Mail.",
-                    minlength: "Title should be minimum of 5 chanracters.",
-                    maxlength: "Title should should not be beyond 50 characters."
+                    required: "Please Enter Admin User E-Mail Address.",
+                    minlength: "Title should be minimum of 5 characters.",
+                    maxlength: "Title should should not be beyond 50 characters.",
+                    email: "Please enter a valid email address."
                 },
                 userPassword: {
-                    required: "Enter Password.",
-                    minlength: "Title should be minimum of 5 chanracters.",
+                    required: "Please Enter Admin User Password.",
+                    minlength: "Title should be minimum of 5 characters.",
                     maxlength: "Title should should not be beyond 50 characters."
                 },
                 userCpassword: {
-                    required: "Enter Confirm Password.",
-                    minlength: "Title should be minimum of 5 chanracters.",
-                    maxlength: "Title should should not be beyond 50 characters."
-                }                  
+                    required: "Please Enter Admin User Confirm Password.",
+                    minlength: "Title should be minimum of 5 characters.",
+                    maxlength: "Title should should not be beyond 50 characters.",
+                    equalTo: "Please enter the same password as above."
+                },
+                terms: {
+                  required: "Please accept our terms"  
+                }             
             },
             errorElement: 'span',
             errorPlacement: function (error, element) {
-                error.addClass('error');
-                element.closest('#input-group-error').append(error);
+              error.addClass('invalid-feedback');
+              element.closest('#input-group-error').append(error);
             },
             highlight: function (element, errorClass, validClass) {
-                $(element).addClass('is-invalid');
+              $(element).addClass('is-invalid');
             },
             unhighlight: function (element, errorClass, validClass) {
-                $(element).removeClass('is-invalid');
+              $(element).removeClass('is-invalid');
+            },
+            submitHandler: function(form) {
+              form.submit();
             }
         });
-
-        var userFullName = $("#userFullName").val();
-        var userLoginName = $("#userLoginName").val();
-        var userEmail = $("#userEmail").val();
-        var userPassword = $("#userPassword").val();
-        var userCpassword = $("#userCpassword").val();
-        
-        /*var eventStartDate = $("#eventStartDate").val();
-        var eventEndDate = $("#eventEndDate").val();
-        var eventVenue = $("#eventVenue").val();
-        var eventCountry = $("#eventCountry").val();
-        var eventCategory = $("#eventCategory").val();
-        var eventSubCategory = $("#eventSubCategory").val();*/
-
-        var formData = {
-            userFullName: userFullName,
-            userLoginName: userLoginName,
-            userEmail: userEmail,
-            userPassword: userPassword,
-            userCpassword: userCpassword,
-
-            /*
-            eventStartDate: eventStartDate,
-            eventEndDate: eventEndDate,
-            eventVenue: eventVenue,
-            eventCountry: eventCountry,
-            eventCategory: eventCategory,
-            eventSubCategory: eventSubCategory,*/
-        };
-
-        $.ajax({
-            url: "../private/controllers/admin_register_src.php",
-            cache: false,
-            type: "POST",
-            datatype:"JSON",
-            data: formData,
-            success: function(html) {
-                //$("#registerAdminUserRespDiv").append(html);
-                //$("#eventSucResponseDiv").append(html);
-                setTimeout(function() {
-                    window.location.replace("index.php");
-                }, 1000);
-            }
-        });
-        event.preventDefault();
       });
-    }); 
-
-    /*jQuery.noConflict();
-    (function( $ ) {
-        $(function () {
-            $.validator.setDefaults({
-                submitHandler: function () {
-                    var eventId = $("#eventId").val();
-                    var eventAction = $("#eventAction").val();
-                    var eventTitle = $("#eventTitle").val();
-                    var eventState = $("#eventState").val();
-                    var eventCity = $("#eventCity").val();
-                    var eventStartDate = $("#eventStartDate").val();
-                    var eventEndDate = $("#eventEndDate").val();
-                    var eventVenue = $("#eventVenue").val();
-                    var eventCountry = $("#eventCountry").val();
-                    var eventCategory = $("#eventCategory").val();
-                    var eventSubCategory = $("#eventSubCategory").val();
-
-                    var formData = {
-                        eventId: eventId,
-                        eventAction: eventAction,
-                        eventTitle: eventTitle,
-                        eventState: eventState,
-                        eventCity: eventCity,
-                        eventStartDate: eventStartDate,
-                        eventEndDate: eventEndDate,
-                        eventVenue: eventVenue,
-                        eventCountry: eventCountry,
-                        eventCategory: eventCategory,
-                        eventSubCategory: eventSubCategory,
-                    };
-
-                    $.ajax({
-                        url: "../private/controllers/event.php",
-                        cache: false,
-                        type: "POST",
-                        datatype:"JSON",
-                        data: formData,
-                        success: function(html) {
-                            $("#eventSucResponseDiv").append(html);
-                            setTimeout(function() {
-                                window.location.replace("events.php");
-                            }, 2000);
-                        }
-                    });
-                }
-            });
-
-            $('#addEvent').validate({
-                rules: {
-                    eventTitle: {
-                        required: true,
-                        minlength: 5,
-                        maxlength: 50
-                    },
-                    eventVenue: {
-                        required: true,
-                        minlength: 10,
-                        maxlength: 200
-                    },
-                    eventStartDate: {
-                        required: true
-                    },
-                    eventEndDate: {
-                        required: true
-                    }
-                },
-                messages: {
-                    eventTitle: {
-                        required: "Enter Title.",
-                        minlength: "Title should be minimum of 5 chanracters.",
-                        maxlength: "Title should should not be beyond 50 characters."
-                    },
-                    eventVenue: {
-                        required: "Enter Venue.",
-                        minlength: "Title should be minimum of 5 chanracters.",
-                        maxlength: "Title should should not be beyond 200 characters."
-                    },
-                    eventStartDate: {
-                        required: "Enter Start Date and Time."
-                    },
-                    eventEndDate: {
-                        required: "Enter End Date and Time."
-                    }                   
-                },
-                errorElement: 'span',
-                errorPlacement: function (error, element) {
-                    error.addClass('invalid-feedback');
-                    element.closest('.form-group').append(error);
-                },
-                highlight: function (element, errorClass, validClass) {
-                    $(element).addClass('is-invalid');
-                },
-                unhighlight: function (element, errorClass, validClass) {
-                    $(element).removeClass('is-invalid');
-                }
-            });
-        });
-    })(jQuery);*/
-</script>    
+  </script>    
+</body>
+</html>

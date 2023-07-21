@@ -8,6 +8,21 @@
 		$panel_setting = new Setting();
 		$panel_setting = $panel_setting->where(["admin_id"=> $admin->id])->one();
 	}
+
+  $eventsCount = new Event();
+  $all_events = (array) $eventsCount->where(["admin_id" => $admin->id])->all();
+
+ /* print"<pre>";
+  print_r(count($all_events));
+  exit;*/
+
+  $eventCount = 0;
+  if(!empty($all_events)) {
+    $eventCount = count($all_events);
+  }
+
+ /* echo "eventCount-".$eventCount;
+  exit;*/
 ?>
 <?php require("common/php/php-head.php"); ?>
 <body class="hold-transition sidebar-mini layout-fixed">
@@ -28,20 +43,16 @@
     <div class="content-header">
       <div class="container-fluid">
         <div class="row mb-2">
-          <div class="col-sm-6">
-            <h1 class="m-0">Dashboard</h1>
-          </div><!-- /.col -->
-          <div class="col-sm-6">
-            <ol class="breadcrumb float-sm-right">
+          <div class="col-sm-12">
+            <ol class="breadcrumb float-sm-left">
               <li class="breadcrumb-item"><a href="#">Home</a></li>
-              <li class="breadcrumb-item active">Dashboard v1</li>
+              <li class="breadcrumb-item active">Dashboard</li>
             </ol>
           </div><!-- /.col -->
         </div><!-- /.row -->
       </div><!-- /.container-fluid -->
     </div>
     <!-- /.content-header -->
-
     <!-- Main content -->
     <section class="content">
       <div class="container-fluid">
@@ -51,14 +62,13 @@
             <!-- small box -->
             <div class="small-box bg-info">
               <div class="inner">
-                <h3>150</h3>
-
-                <p>New Orders</p>
+                <h3><?php echo $eventCount; ?></h3>
+                <p>Events</p>
               </div>
               <div class="icon">
                 <i class="ion ion-bag"></i>
               </div>
-              <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+              <a href="events.php" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
             </div>
           </div>
           <!-- ./col -->
@@ -66,9 +76,8 @@
             <!-- small box -->
             <div class="small-box bg-success">
               <div class="inner">
-                <h3>53<sup style="font-size: 20px">%</sup></h3>
-
-                <p>Bounce Rate</p>
+                <h3>53<!--<sup style="font-size: 20px">%</sup>--></h3>
+                <p>Event Bookings</p>
               </div>
               <div class="icon">
                 <i class="ion ion-stats-bars"></i>
@@ -82,8 +91,7 @@
             <div class="small-box bg-warning">
               <div class="inner">
                 <h3>44</h3>
-
-                <p>User Registrations</p>
+                <p>Player Registrations</p>
               </div>
               <div class="icon">
                 <i class="ion ion-person-add"></i>
@@ -97,7 +105,6 @@
             <div class="small-box bg-danger">
               <div class="inner">
                 <h3>65</h3>
-
                 <p>Unique Visitors</p>
               </div>
               <div class="icon">
