@@ -1,33 +1,35 @@
 <?php
   $s_config = new Site_Config();
-  if(!empty($admin->id)){
-
+  if(!empty($admin->id)) {
       $s_config = $s_config->where(["admin_id" => $admin->id])->one();
-  }else{
+  } else {
       $s_config->title = "Welcome";
       $s_config->tag_line = "A Simple Website";
       $s_config->favicon_image_name = "";
   }
 
-$current = basename($_SERVER["SCRIPT_FILENAME"]);
-$index = $users = $setting = $admob = $site_config = $push_notifications = $products = $categories = "";
-$payment = $attributes = $orders = $sub_categories = "";
+  $current = basename($_SERVER["SCRIPT_FILENAME"]);
+  $index = $users = $setting = $admob = $site_config = $push_notifications = $products = $categories = "";
+  $payment = $attributes = $orders = $sub_categories = "";
 
-if($current == "index.php") $index = "active";
-else if(($current == "cms.php") ||($current == "cms-form.php")) $cms_page = "active";
-else if(($current == "categories.php") ||($current == "category-form.php")) $categories = "active";
-else if(($current == "sub-categories.php") ||($current == "sub-category-form.php")) $sub_categories = "active";
-else if(($current == "products.php") ||($current == "product-form.php")) $products = "active";
-else if(($current == "events.php") ||($current == "event-form.php")) $events = "active";
-else if(($current == "attributes.php") ||($current == "attribute-form.php")) $attributes = "active";
-else if(($current == "orders.php") || ($current == "order-detail.php") || ($current == "generate-invoice.php")) $orders = "active";
-else if($current == "payment.php") $payment = "active";
-else if($current == "users.php") $users = "active";
-else if(($current == "sliders.php") ||($current == "slider-form.php")) $sliders = "active";
-else if($current == "setting.php") $setting = "active";
-else if($current == "admob.php") $admob = "active";
-else if($current == "site-config.php") $site_config = "active";
-else if(($current == "push-notifications.php") || $current == "push-notification-form.php") $push_notifications = "active";
+  if($current == "index.php") $index = "active";
+  else if(($current == "cms.php") ||($current == "cms-form.php")) $cms_page = "active";
+  else if(($current == "categories.php") ||($current == "category-form.php")) $categories = "active";
+  else if(($current == "sub-categories.php") ||($current == "sub-category-form.php")) $sub_categories = "active";
+  else if(($current == "products.php") ||($current == "product-form.php")) $products = "active";
+  else if(($current == "events.php") ||($current == "event-form.php")) $events = "active";
+  else if(($current == "attributes.php") ||($current == "attribute-form.php")) $attributes = "active";
+  else if(($current == "orders.php") || ($current == "order-detail.php") || ($current == "generate-invoice.php")) $orders = "active";
+  else if($current == "payment.php") $payment = "active";
+  else if($current == "users.php") $users = "active";
+  else if(($current == "sliders.php") ||($current == "slider-form.php")) $sliders = "active";
+  else if($current == "setting.php") $setting = "active";
+  else if($current == "admob.php") $admob = "active";
+  else if($current == "site-config.php") $site_config = "active";
+  else if(($current == "push-notifications.php") || $current == "push-notification-form.php") $push_notifications = "active";
+
+  $admin = Session::get_session(new Admin());
+  $siteConfig = Session::get_session(new Site_Config());
 ?>
 <!-- <div class="sidebar">
     <ul class="sidebar-list">
@@ -54,10 +56,9 @@ else if(($current == "push-notifications.php") || $current == "push-notification
           <img src="dist/img/user2-160x160.jpg" class="img-circle elevation-2" alt="User Image">
         </div>
         <div class="info">
-          <a href="#" class="d-block">Alexander Pierce</a>
+          <a href="#" class="d-block"><?php echo (!empty($admin->username)?ucfirst($admin->username):'') ?></a>
         </div>
       </div>
-
       <!-- SidebarSearch Form -->
       <div class="form-inline">
         <div class="input-group" data-widget="sidebar-search">
@@ -69,7 +70,6 @@ else if(($current == "push-notifications.php") || $current == "push-notification
           </div>
         </div>
       </div>
-
       <!-- Sidebar Menu -->
       <nav class="mt-2">
         <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">

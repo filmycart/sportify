@@ -227,11 +227,8 @@
     <section class="content-header">
       <div class="container-fluid">
         <div class="row mb-2">
-          <div class="col-sm-6">
-            <!-- <h1>Events</h1> -->&nbsp;
-          </div>
-          <div class="col-sm-6">
-            <ol class="breadcrumb float-sm-right">
+          <div class="col-sm-12">
+            <ol class="breadcrumb float-sm-left">
               <li class="breadcrumb-item"><a href="index.php">Home</a></li>
               <li class="breadcrumb-item active">Events</li>
             </ol>
@@ -263,7 +260,7 @@
                 <div class="modal-dialog modal-lg">
                   <div class="modal-content">
                     <div class="modal-header">
-                      <h4 class="modal-title">Update Event</h4>
+                      <h4 class="modal-title"><span id="modal-title-text"></span></h4>
                       <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                       </button>
@@ -609,7 +606,14 @@
 
             function addEditEvent(eventAction, eventId, countryId, cityId, stateId, categoryId, subCategoryId) {
                 console.log("eventAction",eventAction);
-                if(eventAction != "delete") {
+
+                if(eventAction == "add") {
+                    $('#modal-title-text').text('Add Event');
+                } else if(eventAction == "edit") {
+                    $('#modal-title-text').text('Update Event');
+                }
+
+                if(eventAction == "delete") {
                     console.log("here");  
                     $("#modal-div").addClass('hideModalDiv');
                 } else {

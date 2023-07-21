@@ -2,6 +2,10 @@
 
 <?php
 
+/*print"<pre>";
+print_r($_POST);
+exit;*/
+
 if (Helper::is_post()) {
     $admin = new Admin();
     $s_config = new Site_Config();
@@ -39,7 +43,6 @@ if (Helper::is_post()) {
     } 
 
     if($errors->is_empty()) {
-        $id = $admin->save();
         $adminSession->id = (int) $id;
         $adminSession->password = password_hash($admin->password, PASSWORD_BCRYPT);
         $adminSession->email = $admin->email;
@@ -61,7 +64,6 @@ if (Helper::is_post()) {
         }
 
         Session::set_session($adminSession);
-        Session::set_session($s_config);
         $success = true;
     }
 
