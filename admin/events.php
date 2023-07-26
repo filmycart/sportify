@@ -385,7 +385,7 @@
                                     <?php echo $item->id; ?>
                                 </td>
                                 <td>
-                                    <a href="event-form.php?id=<?php echo $item->id; ?>"><?php echo $item->title; ?></a>
+                                    <a href="#" data-toggle="modal" data-target="#event-form-modal" onclick="addEditEvent('edit','<?php echo $item->id; ?>','<?php echo $item->country_id; ?>','<?php echo $item->city_id; ?>','<?php echo $item->state_id; ?>','<?php echo $item->category_id; ?>','<?php echo $item->sub_category_id; ?>')"><?php echo $item->title; ?></a>
                                 </td>
                                 <?php 
                                     if(!empty($sub_categories_assoc[$item->sub_category_id])){
@@ -797,14 +797,14 @@
                         },
                         messages: {
                             eventTitle: {
-                                required: "Enter Title.",
-                                minlength: "Title should be minimum of 5 characters.",
-                                maxlength: "Title should should not be beyond 50 characters."
+                                required: "Event Title should not be empty.",
+                                minlength: "Event Title should be minimum of 5 characters.",
+                                maxlength: "Event Title should should not be beyond 50 characters."
                             },
                             eventVenue: {
-                                required: "Enter Venue.",
-                                minlength: "Title should be minimum of 5 characters.",
-                                maxlength: "Title should should not be beyond 200 characters."
+                                required: "Event Venue should not be empty.",
+                                minlength: "Event Venue should be minimum of 5 characters.",
+                                maxlength: "Event Venue should should not be beyond 200 characters."
                             },
                             eventStartDate: {
                                 required: "Enter Start Date and Time."
