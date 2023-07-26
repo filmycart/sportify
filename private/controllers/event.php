@@ -36,7 +36,7 @@
         $event = new Event();
 
         if (Helper::is_post()) {
-            if((empty($pgEventId)) && ($pgEventAction == "create")) {
+            if((empty($pgEventId)) && ($pgEventAction == "add")) {
                 $event->title = trim($_POST['eventTitle']);
                 $event->state_id = $_POST['eventState'];
                 $event->city_id = $_POST['eventCity'];
@@ -62,7 +62,7 @@
                         $errors = $upload->get_errors();
                     }*/
 
-                    if($errors->is_empty()){
+                    if($errors->is_empty()) {
                         $id = $event->save();
                         $has_error_creation = false;
                         /*$uploaded_image_names = Helper::post_val("uploaded-image-names");
@@ -115,7 +115,7 @@
                 $event->end_date = trim($_POST['eventEndDate']);
                 $event->status = (isset($_POST['status'])) ? 1 : 1;
                 $event->admin_id = $admin->id;
-                $event->category_id = $_POST['eventCategory'];
+                $event->category_id = ((isset($_POST['eventCategory'])) && (!empty($_POST['eventCategory'])))?$_POST['eventCategory']:'';
                 $event->sub_category_id = ((isset($_POST['eventSubCategory'])) && (!empty($_POST['eventSubCategory'])))?$_POST['eventSubCategory']:'';
                 //$event->validate_except(["id", "image_resolution", "sell", "group_by"]);
                 $errors = $event->get_errors();
@@ -193,13 +193,9 @@
                 echo "Event Updated Successfully.";
                 exit;
             }
-        }else if (Helper::is_get()) {
+        } elseif((!empty($pgEventId)) && ($pgEventAction == "delete")) {
             $event->id = Helper::get_val('eventId');
             $event->admin_id = Helper::get_val('admin_id');
-
-            /*print"<pre>";
-            print_r($event);
-            exit;*/
 
             //if(!empty($event->admin_id) && !empty($event->id)) {
             if(!empty($event->id)) {
@@ -207,23 +203,12 @@
                     $event_from_db = new Event();
                     $event_from_db = $event_from_db->where(["id" => $event->id])->one();
 
-/*                    print"<pre>";
-                    print_r($event_from_db);
-                    exit;*/
-
                     if($event_from_db) {
                         $image = $event_from_db->image_name;
 
-                        /*print"<pre>";
-                        print_r($event);    
-                        exit;*/
-
                         //if($event->where(["id" => $event->id])->andWhere(["admin_id" => $event->admin_id])->delete()) {
-                        //if($event->where(["id" => $event->id])->delete()) {
+                        if($event->where(["id" => $event->id])->delete()) {
 
-                            /*print"<pre>";
-                            print_r($event);
-                            exit;*/
                             /*Upload::delete($image);
 
                             $image_from_db = new Item_Image();
@@ -242,16 +227,7 @@
                             $inventory = $inventory->where(["product"=>$event->id])->delete();*/
                             $delEventMsg = 1;
                             $message->set_message($delEventMsg);
-                            //exit;
-                            /*print"<pre>";
-                            print_r($message);
-                            exit;*/
-
-                            /*print"<pre>";
-                            print_r($event);
-                            exit;*/
-
-                        //}else $errors->add_error("Error Occurred While Deleting");
+                        }else $errors->add_error("Error Occurred While Deleting");
                     } else {
                         $errors->add_error("Invalid Event");
                     }

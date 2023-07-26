@@ -26,8 +26,6 @@
         $sort_by = "id";
         $sort_type = "desc";
         //$all_events = (array) $events->orderBy('id')->orderType('desc')->all();
-        //$all_events = (array) $events->orderBy('id')->orderType('desc')->all();
-
         $all_events = $events->where(["admin_id" => $admin->id])
                             //->like(["title" => $search])->like(["tags" => $search])->search()
                             ->orderBy($sort_by)->orderType($sort_type)->all();
@@ -188,27 +186,10 @@
         Helper::redirect_to("login.php");
     }
 
-    /*print"<pre>";
-    print_r($_GET);
-    exit;*/
-
     $delMsg = '';
     if((isset($_GET['delmsg'])) && (!empty($_GET['delmsg']))) {
         $delMsg = 'Event Deleted Successfully.';
     }
-
-   /* print"<pre>";
-    print_r($viewEventArray);
-    exit;*/
-
-    /*$viewEvent = new Event();
-    $viewEventArray = array();
-    if((Helper::is_get()) && (!empty($pgEventId)) && ($pgEventAction == "view")) {
-        $viewEvent->id = $pgEventId;
-        $viewEventArray = (array) $viewEvent->where(["id" => $viewEvent->id])->andwhere(["admin_id" => $admin->id])->one();
-        
-        
-    }*/
 ?>
 <link rel="stylesheet" href="../../plugins/datatables-bs4/css/dataTables.bootstrap4.min.css">
 
@@ -220,8 +201,7 @@
             <img class="animation__shake" src="dist/img/AdminLTELogo.png" alt="AdminLTELogo" height="60" width="60">
         </div>
         <?php require("common/php/header.php"); ?>
-        <?php require("common/php/sidebar.php"); ?>
-        
+        <?php require("common/php/sidebar.php"); ?>        
         <div class="content-wrapper">
     <!-- Content Header (Page header) -->
     <section class="content-header">
@@ -249,13 +229,28 @@
                         <h3 class="card-title">Events</h3>
                     </div>  
                     <div style="width:9%;float:right;">  
-                        <!-- <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#add-event-modal">
-                            Add Event
-                        </button> -->
-                        <a href="#" data-toggle="modal" data-target="#event-form-modal" class="btn btn-primary btn-sm" onclick="addEditEvent('add','','','','','')">Add Event</a>
+                        <a href="#" data-toggle="modal" data-target="#event-form-modal" class="btn btn-primary btn-sm" onclick="addEditEvent('create','','101','4183','35','33','37')">Add Event</a>
                     </div>
                 </div>
               </div>
+               <div class="modal fade" id="del-event-form-modal">
+                <div class="modal-dialog modal-lg">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <h4 class="modal-title"><span id="del-modal-title-text"></span></h4>
+                      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                      </button>
+                    </div>
+                    <div class="modal-body">
+                        <div id="delEventSucResponseDiv" style="color:green;"></div>
+                    </div>
+                  </div>
+                  <!-- /.modal-content -->
+                </div>
+                <!-- /.modal-dialog -->
+              </div>
+              <!-- /.modal -->
               <div class="modal fade" id="event-form-modal">
                 <div class="modal-dialog modal-lg">
                   <div class="modal-content">
@@ -277,7 +272,7 @@
                                 <input type="hidden" id="eventCountry" name="eventCountry" value="101" />
                                 <div id="eventSucResponseDiv" style="color:green;"></div>
                                 <div id="eventErrResponseDiv" style="color:green;"></div>
-                            <div style="float:left;width:100%;border:1px solid red;" id="modal-div">    
+                            <div style="float:left;width:100%;border:0px solid red;" id="modal-div">    
                                 <div style="float:left;width:100%;">
                                     <div style="float:left;width:48%;">
                                         <label>Title</label>
@@ -354,7 +349,7 @@
                         </form>
                     </div>
                     <div class="modal-footer right-content-between">
-                      <button type="button" class="btn btn-primary" onclick="submitEvent()">Save</button>
+                      <button type="button" name="eventSubmit" name="eventSubmit" class="btn btn-primary" onclick="submitEvent()">Save</button>
                     </div>
                   </div>
                   <!-- /.modal-content -->
@@ -444,7 +439,7 @@
                                 </td>
                                 <td>
                                     <a href="#" data-toggle="modal" data-target="#event-form-modal" onclick="addEditEvent('edit','<?php echo $item->id; ?>','<?php echo $item->country_id; ?>','<?php echo $item->city_id; ?>','<?php echo $item->state_id; ?>','<?php echo $item->category_id; ?>','<?php echo $item->sub_category_id; ?>')"><i class="ion-compose"></i></a>
-                                    <a href="#" data-toggle="modal" data-target="#event-form-modal" onclick="addEditEvent('delete','<?php echo $item->id; ?>','<?php echo $item->admin_id; ?>')"><i class="ion-trash-a"></i></a>
+                                    <a href="#" data-toggle="modal" data-target="#del-event-form-modal" onclick="deleteEvent('delete','<?php echo $item->id; ?>','<?php echo $item->admin_id; ?>')"><i class="ion-trash-a"></i></a>
                                 </td>
                               </tr>
                   <?php 
@@ -555,70 +550,34 @@
             });
         </script>
         <script>
-            function eventState(countryId, cityId, stateId) {
-                $.ajax({
-                    url: "state.php",
-                    cache: false,
-                    type: "POST",
-                    data: {countryId : countryId, stateSelId : stateId},
-                    success: function(html){
-                        $("#eventStateDiv").append(html);
-                        eventCity(stateId);
-                    }
-                });
+            function deleteEvent(eventAction, eventId, countryId, cityId, stateId, categoryId, subCategoryId) {
+
+                $('#del-modal-title-text').text('Delete Event');
+
+                var formData = {};
+                if(eventAction == "delete") {
+                    formData = {
+                        "eventId": eventId,
+                        "eventAction": eventAction
+                    };
+                
+                    $.ajax({
+                        url: "../private/controllers/event.php",
+                        cache: false,
+                        type: "GET",
+                        datatype:"JSON",
+                        data: formData,
+                        success: function(html) {           
+                            $("#delEventSucResponseDiv").append(html);
+                            setTimeout(function() {
+                                window.location.replace("events.php");
+                            }, 2000);                    
+                        }
+                    });
+                }
             }
 
-            function eventCity(stateId) {
-                $.ajax({
-                    url: "city.php",
-                    cache: false,
-                    type: "POST",
-                    data: {stateId : stateId},
-                    success: function(html){
-                        $("#eventCityDiv").append(html);
-                    }
-                });
-            }   
-
-            function eventCategory(categoryId) {
-                $.ajax({
-                    url: "category.php",
-                    cache: false,
-                    type: "POST",
-                    success: function(html){
-                        $("#eventCategoryDiv").append(html);
-                    }
-                });
-            } 
-
-            function eventSubCategory(categoryId, subCategoryId) {
-                var parentCategoryId = $("#eventCategory").val();
-                $.ajax({
-                    url: "sub_category.php",
-                    cache: false,
-                    type: "POST",
-                    data: {parentCategoryId : categoryId},
-                    success: function(html){
-                        $("#eventSubCategoryDiv").append(html);
-                    }
-                });
-            }       
-
             function addEditEvent(eventAction, eventId, countryId, cityId, stateId, categoryId, subCategoryId) {
-                console.log("eventAction",eventAction);
-
-                if(eventAction == "add") {
-                    $('#modal-title-text').text('Add Event');
-                } else if(eventAction == "edit") {
-                    $('#modal-title-text').text('Update Event');
-                }
-
-                if(eventAction == "delete") {
-                    console.log("here");  
-                    $("#modal-div").addClass('hideModalDiv');
-                } else {
-                    $("#modal-div").removeClass('hideModalDiv');
-                }
 
                 $("#eventSucResponseDiv").html('');
                 $("#eventErrResponseDiv").html('');                
@@ -632,22 +591,18 @@
                 eventSubCategory(categoryId, subCategoryId);
 
                 var formData = {};
-
-                if(eventAction == "add") {
-                    formData = {
-                        "eventId": "",
-                        "eventAction": eventAction,
-                        "eventTitle":  $("#eventTitle").val(),
-                        "eventState":  $("#eventState").val(),
-                        "eventCity":  $("#eventCity").val(),
-                        "eventCountry":  $("#eventCountry").val(),
-                        "eventVenue":  $("#eventVenue").val(),
-                        "eventStartDate":  $("#eventStartDate").val(),
-                        "eventEndDate":  $("#eventEndDate").val(),
-                        "eventCategory":  $("#eventCategory").val(),
-                        "eventSubCategory":  $("#eventSubCategory").val()
-                    };
+                if(eventAction == "create") {
+                    $("#eventAction").val(eventAction);
+                    $('#modal-title-text').text('Add Event');
+                    $("#eventId").val('');
+                    $("#eventAction").val('add');
+                    $("#eventTitle").val('');
+                    $("#eventStartDate").val('');
+                    $("#eventEndDate").val('');
+                    $("#eventVenue").val('');
                 } else if(eventAction == "edit") {
+                    $("#eventAction").val(eventAction);
+                    $('#modal-title-text').text('Update Event');
                     formData = {
                         "eventId": eventId,
                         "eventAction": eventAction
@@ -657,42 +612,33 @@
                         "eventId": eventId,
                         "eventAction": eventAction
                     };
-                }               
+                }           
 
-                $.ajax({
-                    url: "../private/controllers/event.php",
-                    cache: false,
-                    type: "GET",
-                    datatype:"JSON",
-                    data: formData,
-                    success: function(html) {
-                        if(eventAction != "delete") {    
+                if(eventAction == "edit") {
+                    $.ajax({
+                        url: "../private/controllers/event.php",
+                        cache: false,
+                        type: "GET",
+                        datatype:"JSON",
+                        data: formData,
+                        success: function(html) {           
                             respArr = JSON.parse(html);
+                            if(eventAction == "edit") {
+                                $("#eventId").val(respArr.id);
+                                $("#eventAction").val('update');
+                                $("#eventTitle").val(respArr.title);
+                                $("#eventStartDate").val(respArr.start_date);
+                                $("#eventEndDate").val(respArr.end_date);
+                                $("#eventVenue").val(respArr.address);
+                                $("#eventCountry").val(respArr.country_id);
+                            }                    
                         }
-
-                        if(eventAction == "add") {
-                            $("#eventSucResponseDiv").append(respArr);
-                        } else if(eventAction == "edit") {
-                            $("#eventId").val(respArr.id);
-                            $("#eventAction").val('update');
-                            $("#eventTitle").val(respArr.title);
-                            $("#eventStartDate").val(respArr.start_date);
-                            $("#eventEndDate").val(respArr.end_date);
-                            $("#eventVenue").val(respArr.address);
-                            $("#eventCountry").val(respArr.country_id);
-                        } else if(eventAction == "delete") {
-                            $("#eventSucResponseDiv").append(html);
-
-                            /*setTimeout(function() {
-                                window.location.replace("events.php");
-                            }, 2000);*/
-                        }                        
-                    }
-                });
+                    });
+                }
             }
 
             function submitEvent() {
-                /*$('#addEvent').validate({
+                /*$('#updateEvent').validate({
                     rules: {
                         eventTitle: {
                             required: true,
@@ -830,7 +776,7 @@
                         }
                     });
 
-                    $('#addEvent').validate({
+                    $('#updateEvent').validate({
                         rules: {
                             eventTitle: {
                                 required: true,
