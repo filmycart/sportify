@@ -785,7 +785,7 @@
                             },
                             eventVenue: {
                                 required: true,
-                                minlength: 10,
+                                minlength: 5,
                                 maxlength: 200
                             },
                             eventStartDate: {
@@ -798,12 +798,12 @@
                         messages: {
                             eventTitle: {
                                 required: "Enter Title.",
-                                minlength: "Title should be minimum of 5 chanracters.",
+                                minlength: "Title should be minimum of 5 characters.",
                                 maxlength: "Title should should not be beyond 50 characters."
                             },
                             eventVenue: {
                                 required: "Enter Venue.",
-                                minlength: "Title should be minimum of 5 chanracters.",
+                                minlength: "Title should be minimum of 5 characters.",
                                 maxlength: "Title should should not be beyond 200 characters."
                             },
                             eventStartDate: {
