@@ -12,17 +12,9 @@
 		$countryId = $_POST["countryId"];
         $stateSelId = $_POST["stateSelId"];
 		$allState = (array) $state->where(["country_id" => $countryId])->orderBy($sort_by)->orderType($sort_type)->all();
-	}    
-
-	/*print"<pre>";
-	print_r($stateSelId);
-    exit;*/
-
-    /*if(!empty($stateSelId)) {
-        $stateSel = "";
-    }*/
+	}
 ?>
-<select class="form-control select2 select2-danger" id="eventState" name="eventState" data-dropdown-css-class="select2-danger" style="width: 100%;" onchange="eventCity(this.value)">
+<select class="form-control select2 select2-danger" id="eventState" name="eventState" data-dropdown-css-class="select2-danger" style="width: 100%;">
     <?php
     	if(!empty($allState)){
     		foreach($allState as $allStateVal){
@@ -41,3 +33,17 @@
     	}
     ?>
 </select>
+<script type="text/javascript">
+    $("#eventState").change(function() {
+        var stateId = $("#eventState").val();
+        $.ajax({
+            url: "city.php",
+            cache: false,
+            type: "POST",
+            data: {stateId : stateId},
+            success: function(html){
+                $("#eventCityDiv").html(html);
+            }
+        });
+    });    
+</script>

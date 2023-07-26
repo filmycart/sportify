@@ -12,17 +12,10 @@
   $eventsCount = new Event();
   $all_events = (array) $eventsCount->where(["admin_id" => $admin->id])->all();
 
- /* print"<pre>";
-  print_r(count($all_events));
-  exit;*/
-
   $eventCount = 0;
   if(!empty($all_events)) {
     $eventCount = count($all_events);
   }
-
- /* echo "eventCount-".$eventCount;
-  exit;*/
 ?>
 <?php require("common/php/php-head.php"); ?>
 <body class="hold-transition sidebar-mini layout-fixed">

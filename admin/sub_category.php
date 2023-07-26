@@ -5,17 +5,26 @@
 
     $sort_by = "title";
     $sort_type = "ASC";
-	if(Helper::is_post() && isset($_POST["parentCategoryId"])){
-		$parentCategoryId = $_POST["parentCategoryId"];
-		$allCategory = (array) $category->orderBy($sort_by)->orderType($sort_type)->all();
+    $subCategoryId = "";
+
+	if(Helper::is_post() && isset($_POST["categoryId"])) {
+        $categoryId = $_POST["categoryId"];        
+        if((isset($_POST["subCategoryId"])) && (!empty($_POST["subCategoryId"]))) {
+            $subCategoryId = $_POST["subCategoryId"];
+        }
+		$allCategory = (array) $category->where(["parent_id" => $categoryId])->orderBy($sort_by)->orderType($sort_type)->all();
 	}
 ?>
-<select class="form-control select2 select2-danger" id="eventCategory" name="eventCategory" data-dropdown-css-class="select2-danger" style="width: 100%;" onchange="eventCity(this.value)">
+<select class="form-control select2 select2-danger" id="eventSubCategory" name="eventSubCategory" data-dropdown-css-class="select2-danger" style="width: 100%;">
     <?php
     	if(!empty($allCategory)){
-    		foreach($allCategory as $allCategoryVal){
+    		foreach($allCategory as $allCategoryVal) {
+                $sel_sub_category = "";
+                if($allCategoryVal->id == $subCategoryId) {
+                    $sel_sub_category = "selected";
+                }
     ?>	
-				<option value="<?php echo $allCategoryVal->id; ?>" ><?php echo $allCategoryVal->title; ?></option>
+				<option value="<?php echo $allCategoryVal->id; ?>" <?php echo $sel_sub_category; ?>><?php echo $allCategoryVal->title; ?></option>
     <?php
     		}
     	}
