@@ -51,7 +51,6 @@
           </form>
         </div>
       </li>
-
       <!-- Messages Dropdown Menu -->
       <!-- <li class="nav-item dropdown">
         <a class="nav-link" data-toggle="dropdown" href="#">
@@ -113,7 +112,7 @@
         <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
           <span class="dropdown-item dropdown-header">Account</span>
           <div class="dropdown-divider"></div>
-          <a href="#" class="dropdown-item">
+          <a href="profile.php" class="dropdown-item">
             <i class="fas fa-envelope mr-2"></i> My Profile
             <!-- <span class="float-right text-muted text-sm">3 mins</span> -->
           </a>
