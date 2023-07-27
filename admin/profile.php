@@ -87,11 +87,8 @@ if(!empty($admin)){
     <section class="content-header">
       <div class="container-fluid">
         <div class="row mb-2">
-          <div class="col-sm-6">
-            &nbsp;
-          </div>
-          <div class="col-sm-6">
-            <ol class="breadcrumb float-sm-right">
+          <div class="col-sm-12">
+            <ol class="breadcrumb float-sm-left">
               <li class="breadcrumb-item"><a href="index.php">Home</a></li>
               <li class="breadcrumb-item active">My Profile</li>
             </ol>
@@ -289,4 +286,5 @@ if(!empty($admin)){
 		</div>
 	</section>
 </div><!--main-container-->
+<script src="plugins/jquery/jquery.min.js"></script>
 <?php require("common/php/php-footer.php"); ?>
