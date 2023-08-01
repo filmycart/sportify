@@ -1,206 +1,77 @@
 <?php 
-	require_once('../private/init.php'); 
-?>
-<?php
-	$admin = Session::get_session(new Admin());
-	if(empty($admin)) Helper::redirect_to("login.php");
-	else{
-		$panel_setting = new Setting();
-		$panel_setting = $panel_setting->where(["admin_id"=> $admin->id])->one();
+	require_once('./private/init.php'); 
+	require_once('./conf/conf.php');
+
+	$s_config = new Site_Config();
+	$s_config = $s_config->one();
+
+	$homepage_cat = new Category();
+	$homepage_cat = $homepage_cat->all();
+
+	$parent_cms_menu = new Cms();
+	$parent_cms_menu = $parent_cms_menu->where(["parent_id" => 0])->andWhere(["status" => 1])->all();
+
+	$child_cms_menu = new Cms();
+	$child_cms_menu = $child_cms_menu->where(["status" => 1])->all();
+
+	$child_cms_disp_menu = array();
+	if(!empty($child_cms_menu)) {
+        foreach($child_cms_menu as $child_cms_menu_val) {
+        	if(!empty($child_cms_menu_val->parent_id)) {
+        		$child_cms_disp_menu[$child_cms_menu_val->parent_id][] = $child_cms_menu_val;
+        	}
+        }
+    }
+
+	/*print"<pre>";
+	print_r($child_cms_disp_menu);
+	exit;*/
+	
+	$homepage_prod = new Product();
+	$homepage_prod = $homepage_prod->where(["sub_category_id" => 2])->all();
+
+	// print"<pre>";
+	// print_r($parent_cms_menu);
+	// exit;
+
+	$pg_name = "";
+	if(!empty($_GET['pg-name'])) {
+		$pg_name = $_GET['pg-name'];
+	}
+	elseif(!empty($_GET['pgName'])) {
+		$pg_name = $_GET['pgName'];
 	}
 
-  $eventsCount = new Event();
-  $all_events = (array) $eventsCount->where(["admin_id" => $admin->id])->all();
-
-  $eventCount = 0;
-  if(!empty($all_events)) {
-    $eventCount = count($all_events);
-  }
+	$menu_active_home = "";
+	$menu_active_contact = "";
+	$menu_active_products = "";
+	if(empty($pg_name)) {	
+		$menu_active_home = "class=\"active\" ";
+	}
+	elseif($pg_name == "home") {
+		$menu_active_home = "class=\"active\" ";
+	}
+	elseif($pg_name == "contact") {
+		$menu_active_contact = "class=\"active\" ";
+	}
+	elseif($pg_name == "products") {
+		$menu_active_products = "class=\"active\" ";
+	}	
+		
+	if(!empty($pg_name)) {
+		switch($pg_name) {
+			case "home":
+				include("frontend/views/template/mathuranjelly/home.php");
+				exit;
+			case "contact":
+				include("frontend/views/template/mathuranjelly/contact.php");	
+				exit;
+			default:
+				include("frontend/views/template/mathuranjelly/home.php");
+				exit;
+		}
+	}	
+	else {
+		include("frontend/views/template/mathuranjelly/home.php");
+	}    
 ?>
-<?php require("common/php/php-head.php"); ?>
-<body class="hold-transition sidebar-mini layout-fixed">
-
-<div class="wrapper">
-  <!-- Preloader -->
-  <div class="preloader flex-column justify-content-center align-items-center">
-    <img class="animation__shake" src="dist/img/AdminLTELogo.png" alt="AdminLTELogo" height="60" width="60">
-  </div>
-
- <?php require("common/php/header.php"); ?>
-
-  <?php require("common/php/sidebar.php"); ?>
-
-  <!-- Content Wrapper. Contains page content -->
-  <div class="content-wrapper">
-    <!-- Content Header (Page header) -->
-    <div class="content-header">
-      <div class="container-fluid">
-        <div class="row mb-2">
-          <div class="col-sm-12">
-            <ol class="breadcrumb float-sm-left">
-              <li class="breadcrumb-item"><a href="#">Home</a></li>
-              <li class="breadcrumb-item active">Dashboard</li>
-            </ol>
-          </div><!-- /.col -->
-        </div><!-- /.row -->
-      </div><!-- /.container-fluid -->
-    </div>
-    <!-- /.content-header -->
-    <!-- Main content -->
-    <section class="content">
-      <div class="container-fluid">
-        <!-- Small boxes (Stat box) -->
-        <div class="row">
-          <div class="col-lg-3 col-6">
-            <!-- small box -->
-            <div class="small-box bg-info">
-              <div class="inner">
-                <h3><?php echo $eventCount; ?></h3>
-                <p>Events</p>
-              </div>
-              <div class="icon">
-                <i class="ion ion-bag"></i>
-              </div>
-              <a href="events.php" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
-            </div>
-          </div>
-          <!-- ./col -->
-          <div class="col-lg-3 col-6">
-            <!-- small box -->
-            <div class="small-box bg-success">
-              <div class="inner">
-                <h3>53<!--<sup style="font-size: 20px">%</sup>--></h3>
-                <p>Event Bookings</p>
-              </div>
-              <div class="icon">
-                <i class="ion ion-stats-bars"></i>
-              </div>
-              <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
-            </div>
-          </div>
-          <!-- ./col -->
-          <div class="col-lg-3 col-6">
-            <!-- small box -->
-            <div class="small-box bg-warning">
-              <div class="inner">
-                <h3>44</h3>
-                <p>Player Registrations</p>
-              </div>
-              <div class="icon">
-                <i class="ion ion-person-add"></i>
-              </div>
-              <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
-            </div>
-          </div>
-          <!-- ./col -->
-          <div class="col-lg-3 col-6">
-            <!-- small box -->
-            <div class="small-box bg-danger">
-              <div class="inner">
-                <h3>65</h3>
-                <p>Unique Visitors</p>
-              </div>
-              <div class="icon">
-                <i class="ion ion-pie-graph"></i>
-              </div>
-              <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
-            </div>
-          </div>
-          <!-- ./col -->
-        </div>
-        <!-- /.row -->
-        <!-- Main row -->
-        <div class="row">
-          <!-- right col (We are only adding the ID to make the widgets sortable)-->
-          <section class="col-lg-7 connectedSortable">
-            <!-- Calendar -->
-            <div class="card bg-gradient-success">
-              <div class="card-header border-0">
-                <h3 class="card-title">
-                  <i class="far fa-calendar-alt"></i>
-                  Calendar
-                </h3>
-                <div class="card-tools">
-                  <div class="btn-group">
-                    <button type="button" class="btn btn-success btn-sm dropdown-toggle" data-toggle="dropdown" data-offset="-52">
-                      <i class="fas fa-bars"></i>
-                    </button>
-                    <div class="dropdown-menu" role="menu">
-                      <a href="#" class="dropdown-item">Add new event</a>
-                      <a href="#" class="dropdown-item">Clear events</a>
-                      <div class="dropdown-divider"></div>
-                      <a href="#" class="dropdown-item">View calendar</a>
-                    </div>
-                  </div>
-                  <button type="button" class="btn btn-success btn-sm" data-card-widget="collapse">
-                    <i class="fas fa-minus"></i>
-                  </button>
-                  <button type="button" class="btn btn-success btn-sm" data-card-widget="remove">
-                    <i class="fas fa-times"></i>
-                  </button>
-                </div>
-              </div>
-              <div class="card-body pt-0">
-                <div id="calendar" style="width: 100%"></div>
-              </div>
-            </div>
-            <!-- /.card -->
-
-            <!-- Map card -->
-            <div class="card bg-gradient-primary">
-              <div class="card-header border-0">
-                <h3 class="card-title">
-                  <i class="fas fa-map-marker-alt mr-1"></i>
-                  Visitors
-                </h3>
-                <!-- card tools -->
-                <div class="card-tools">
-                  <button type="button" class="btn btn-primary btn-sm daterange" title="Date range">
-                    <i class="far fa-calendar-alt"></i>
-                  </button>
-                  <button type="button" class="btn btn-primary btn-sm" data-card-widget="collapse" title="Collapse">
-                    <i class="fas fa-minus"></i>
-                  </button>
-                </div>
-                <!-- /.card-tools -->
-              </div>
-              <div class="card-body">
-                <div id="world-map" style="height: 250px; width: 100%;"></div>
-              </div>
-              <!-- /.card-body-->
-              <div class="card-footer bg-transparent">
-                <div class="row">
-                  <div class="col-4 text-center">
-                    <div id="sparkline-1"></div>
-                    <div class="text-white">Visitors</div>
-                  </div>
-                  <!-- ./col -->
-                  <div class="col-4 text-center">
-                    <div id="sparkline-2"></div>
-                    <div class="text-white">Online</div>
-                  </div>
-                  <!-- ./col -->
-                  <div class="col-4 text-center">
-                    <div id="sparkline-3"></div>
-                    <div class="text-white">Sales</div>
-                  </div>
-                  <!-- ./col -->
-                </div>
-                <!-- /.row -->
-              </div>
-            </div>
-            <!-- /.card -->
-          </section>
-          <!-- right col -->
-        </div>
-        <!-- /.row (main row) -->
-      </div><!-- /.container-fluid -->
-    </section>
-    <!-- /.content -->
-  </div>
-  <!-- /.content-wrapper -->
-<!-- jQuery -->
-<script src="plugins/jquery/jquery.min.js"></script>
-  <?php require("common/php/php-footer.php"); ?>
-
-  
