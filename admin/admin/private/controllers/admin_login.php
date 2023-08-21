@@ -33,12 +33,12 @@ if (Helper::is_post()) {
         }
     }
 
-    if($success)  Helper::redirect_to("../../".ADMIN_FOLER_NAME."/index.php");
+    if($success)  Helper::redirect_to("../../index.php");
     else {
         Session::set_session($errors);
         Session::set_session($siteConfig);
-        Helper::redirect_to("../../".ADMIN_FOLER_NAME."/login.php");
+        Helper::redirect_to("../".ADMIN_FOLER_NAME."/login.php");
     }
-}else Helper::redirect_to("../../".ADMIN_FOLER_NAME."/login.php");
+}else Helper::redirect_to("../".ADMIN_FOLER_NAME."/login.php");
 
 ?>

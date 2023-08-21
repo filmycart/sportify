@@ -1,4 +1,4 @@
-<?php require_once('../private/init.php'); ?>
+<?php require_once('./private/init.php'); ?>
 
 <?php
     $errors = Session::get_temp_session(new Errors());
@@ -262,26 +262,54 @@
                     </div>
                     <div class="modal-body">
                         <style>
-                            .hideModalDiv{
+                            .hideModalDiv {
                                 dispaly:none;
                             }
+
+                            .spinner {
+                                width:25px;
+                                height:25px;
+                            }
+
+                            .eventFormMainDiv {
+                                float:left;
+                                width:100%;
+                                border:0px solid red;
+                            }
+
+                            .eventFormRow {
+                                float:left;
+                                width:100%;
+                                border:0px solid red;
+                            }
+
+                            .eventFormCol {    
+                                float:left;
+                                width:48%;
+                                border:0px solid red;
+                            }
+
+                            .eventFormSpacerDiv { 
+                                 float:left;
+                                 width:1%;
+                            }
                         </style>
-                        <form id="updateEvent" name="updateEvent">
-                                <input type="hidden" id="eventId" name="eventId" value="<?php echo (!empty($eventId)?$eventId:''); ?>" >
-                                <input type="hidden" id="eventAction" name="eventAction" value="<?php echo (!empty($pgAction)?$pgAction:''); ?>" >
-                                <input type="hidden" id="eventCountry" name="eventCountry" value="101" />
-                                <div id="eventSucResponseDiv" style="color:green;"></div>
-                                <div id="eventErrResponseDiv" style="color:green;"></div>
-                            <div style="float:left;width:100%;border:0px solid red;" id="modal-div">    
-                                <div style="float:left;width:100%;">
-                                    <div style="float:left;width:48%;">
+                        <form id="updateEvent" name="updateEvent" enctype="multipart/form-data">
+                            <input type="hidden" id="eventId" name="eventId" value="<?php echo (!empty($eventId)?$eventId:''); ?>" >
+                            <input type="hidden" id="eventAction" name="eventAction" value="<?php echo (!empty($pgAction)?$pgAction:''); ?>" >
+                            <input type="hidden" id="eventCountry" name="eventCountry" value="101" />
+                            <div id="eventSucResponseDiv" style="color:green;"></div>
+                            <div id="eventErrResponseDiv" style="color:green;"></div>
+                            <div class="eventFormMainDiv" id="modal-div">    
+                               <div class="eventFormRow">
+                                    <div class="eventFormCol">
                                         <label>Title</label>
                                         <div class="input-group" data-target-input="nearest">
                                             <input type="text" id="eventTitle" name="eventTitle" class="form-control" data-target="#eventTitle" />
                                         </div>
                                     </div>
-                                    <div style="float:left;width:1%;">&nbsp;</div>
-                                    <div style="float:left;width:48%;">
+                                    <div class="eventFormSpacerDiv">&nbsp;</div>
+                                    <div class="eventFormCol">
                                         <div class="form-group">
                                             <label>Venue</label>
                                             <div class="input-group" data-target-input="nearest">
@@ -290,8 +318,8 @@
                                         </div>                                     
                                     </div>
                                 </div>
-                                <div style="float:left;width:100%;">
-                                    <div style="float:left;width:48%;">
+                                <div class="eventFormRow">
+                                    <div class="eventFormCol">
                                         <div class="form-group">
                                             <label>Start Date</label>
                                             <div class="input-group date" data-target-input="nearest">
@@ -302,8 +330,8 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div style="float:left;width:1%;">&nbsp;</div>
-                                    <div style="float:left;width:48%;">                                     
+                                    <div class="eventFormSpacerDiv">&nbsp;</div>
+                                    <div class="eventFormCol">                                    
                                         <div class="form-group">
                                             <label>End Date</label>
                                             <div class="input-group date" data-target-input="nearest">
@@ -315,33 +343,49 @@
                                         </div> 
                                     </div>
                                 </div>
-                                <div style="float:left;width:100%;">
-                                    <div style="float:left;width:48%;">
+                                <div class="eventFormRow">
+                                    <div class="eventFormCol">
+                                        <div id="stateSpinnerDiv"><img src="./assets/images/spinner.png" class="spinner"></div>
                                         <div class="form-group">
                                             <label>State</label>
                                             <div id="eventStateDiv"></div>
                                         </div>
                                     </div>
-                                    <div style="float:left;width:1%;">&nbsp;</div>
-                                    <div style="float:left;width:48%;">
+                                    <div class="eventFormSpacerDiv">&nbsp;</div>
+                                    <div class="eventFormCol">
+                                        <div id="citySpinnerDiv"><img src="./assets/images/spinner.png" class="spinner"></div>
                                         <div class="form-group">
                                             <label>City</label>
                                             <div id="eventCityDiv"></div>
                                         </div>
                                     </div>
                                 </div> 
-                                <div style="float:left;width:100%;">
-                                    <div style="float:left;width:48%;">
+                                <div class="eventFormRow">
+                                    <div class="eventFormCol">
+                                        <div id="categorySpinnerDiv"><img src="./assets/images/spinner.png" class="spinner"></div>
                                         <div class="form-group">
                                             <label>Category</label>
                                             <div id="eventCategoryDiv"></div>
                                         </div>
                                     </div>
-                                    <div style="float:left;width:1%;">&nbsp;</div>
-                                    <div style="float:left;width:48%;">
+                                    <div class="eventFormSpacerDiv">&nbsp;</div>
+                                    <div class="eventFormCol">
+                                        <div id="subCategorySpinnerDiv"><img src="./assets/images/spinner.png" class="spinner"></div>
                                         <div class="form-group">
                                             <label>Sub Category</label>
                                             <div id="eventSubCategoryDiv"></div>
+                                        </div>
+                                    </div>
+                                    <div class="eventFormSpacerDiv">&nbsp;</div>
+                                    <div class="eventFormCol">
+                                        <div id="evenFileSpinnerDiv"><img src="./assets/images/spinner.png" class="spinner"></div>
+                                        <div id="eventImagePreview"></div>
+                                        <div class="form-group" id="eventFileLabelDiv">
+                                            <label>Image</label>
+                                        </div>
+                                        <div class="form-group" id="eventFileDiv">
+                                            <input name="eventFile" id="eventFile" type="file" multiple />
+                                            <input name="eventFileHidden" id="eventFileHidden" type="text" />
                                         </div>
                                     </div>
                                 </div>  
@@ -550,6 +594,117 @@
             });
         </script>
         <script>
+            function removeA(arr, eventFileName) {
+                const myArray = arr.split(",");
+                position = myArray.indexOf(eventFileName);
+                delete myArray[position];
+                return myArray;
+            }
+
+            function delEventImage(eventFileName, respArray) {
+
+                $('#eventImagePreview').html('');
+
+                respArr = removeA(respArray, eventFileName);
+                respArray1 = "'"+respArr+"'";
+
+                var formdata = new FormData(); 
+    
+                formdata.append("eventAction", "deleteEventImg");
+                formdata.append("eventFileName", eventFileName);
+    
+                var respArray = new Array();
+                var respFileNameArray = new Array();
+                var respFileName = "";
+
+                $.ajax({
+                    url: "./private/controllers/event.php", 
+                    cache: false,
+                    contentType: false,
+                    processData: false,
+                    data: formdata,
+                    dataType: 'json',                         
+                    type: 'POST',
+                    success: function(php_script_response) {
+                        var fileCount = respArr.length;
+                        //console.log("fileCount",fileCount);
+                        for (var index = 0; index < fileCount; index++) {
+                            var src = "'"+respArr[index]+"'";
+                            var src1 = respArr[index];
+                            if((src != undefined) && (src1 != undefined)) {
+                                var delEventImage = 'onclick="delEventImage('+src+','+respArray1+')"';
+                                $('#eventImagePreview').append('<div><a href ="uploads/events/'+src1+'" target="_blank" class="deleteEventImage" id="'+src1+'">'+src1+'</a>&nbsp;<a href="#" '+delEventImage+' name="deleteEventImg" name="deleteEventImg" id="deleteEventImg"><i class="fa fa-trash" aria-hidden="true"></i></a></div>');
+                                respFileNameArray[index] = src1;
+                            }
+                        }  
+
+                        respFileName = respFileNameArray.toString();
+
+                        console.log("respFileNameArray",respFileNameArray);
+                        console.log("respFileName",respFileName);
+
+                        $('#eventFileHidden').val(respFileName);                
+                    }
+                });
+            }
+
+            $('#eventFile').change(function(e) {
+                var fileData = $('#eventFile').prop('files')[0];   
+                var formdata = new FormData(); 
+
+                // Read selected files
+                var totalfiles = document.getElementById('eventFile').files.length;
+                var eventTitle = $('#eventTitle').val();
+                for (var index = 0; index < totalfiles; index++) {
+                    formdata.append("files[]", document.getElementById('eventFile').files[index]);
+                }   
+
+                if (formdata) {
+                    formdata.append("eventAction", "upload");
+                    formdata.append("eventTitle", eventTitle);
+                }
+
+                var respArray = new Array();
+                var respFileNameArray = new Array();
+                var respFileName = "";
+                $.ajax({
+                    url: "./private/controllers/event.php", 
+                    cache: false,
+                    contentType: false,
+                    processData: false,
+                    data: formdata,
+                    dataType: 'json',                         
+                    type: 'POST',
+                    success: function(php_script_response) {
+                        respArray = php_script_response['eventImage'];
+                        respArray1 = "'"+php_script_response['eventImage']+"'";
+                        var fileCount = respArray.length;
+                        for (var index = 0; index < fileCount; index++) {
+                            var src = "'"+respArray[index]+"'";
+                            var src1 = respArray[index];
+                            var delEventImage = 'onclick="delEventImage('+src+','+respArray1+')"';
+
+                            $('#eventImagePreview').append('<div><a href ="uploads/events/'+src1+'" target="_blank" class="deleteEventImage" id="'+src1+'">'+src1+'</a>&nbsp;<a href="#" '+delEventImage+' name="deleteEventImg" name="deleteEventImg" id="deleteEventImg"><i class="fa fa-trash" aria-hidden="true"></i></a></div>');
+                            respFileNameArray[index] = src1;
+                        }   
+
+                        //console.log("respFileNameArray",respFileNameArray);
+                        respFileName = respFileNameArray.toString();
+
+                        $('#eventFileHidden').val(respFileName);
+                        
+                        /*$('#eventFileLabelDiv').hide();
+                        $('#eventFileDiv').hide();*/
+                    }
+                 });      
+            });
+
+            $('#stateSpinnerDiv').show();
+            $('#citySpinnerDiv').hide();
+            $('#categorySpinnerDiv').hide();
+            $('#subCategorySpinnerDiv').hide();
+            $('#evenFileSpinnerDiv').hide();
+
             function deleteEvent(eventAction, eventId, countryId, cityId, stateId, categoryId, subCategoryId) {
 
                 $('#del-modal-title-text').text('Delete Event');
@@ -562,7 +717,7 @@
                     };
                 
                     $.ajax({
-                        url: "../private/controllers/event.php",
+                        url: "../admin/private/controllers/event.php",
                         cache: false,
                         type: "GET",
                         datatype:"JSON",
@@ -616,7 +771,7 @@
 
                 if(eventAction == "edit") {
                     $.ajax({
-                        url: "../private/controllers/event.php",
+                        url: "./private/controllers/event.php",
                         cache: false,
                         type: "GET",
                         datatype:"JSON",
@@ -699,6 +854,7 @@
                 var eventCountry = $("#eventCountry").val();
                 var eventCategory = $("#eventCategory").val();
                 var eventSubCategory = $("#eventSubCategory").val();
+                var eventFileHidden = $("#eventFileHidden").val();
 
                 var formData = {
                     eventId: eventId,
@@ -712,10 +868,11 @@
                     eventCountry: eventCountry,
                     eventCategory: eventCategory,
                     eventSubCategory: eventSubCategory,
+                    eventFileHidden: eventFileHidden
                 };
 
                 $.ajax({
-                    url: "../private/controllers/event.php",
+                    url: "../admin/private/controllers/event.php",
                     cache: false,
                     type: "POST",
                     datatype:"JSON",
@@ -745,6 +902,7 @@
                             var eventCountry = $("#eventCountry").val();
                             var eventCategory = $("#eventCategory").val();
                             var eventSubCategory = $("#eventSubCategory").val();
+                            var eventFileHidden = $("#eventFileHidden").val();
 
                             var formData = {
                                 eventId: eventId,
@@ -758,10 +916,11 @@
                                 eventCountry: eventCountry,
                                 eventCategory: eventCategory,
                                 eventSubCategory: eventSubCategory,
+                                eventFileHidden: eventFileHidden
                             };
 
                             $.ajax({
-                                url: "../private/controllers/event.php",
+                                url: "../admin/private/controllers/event.php",
                                 cache: false,
                                 type: "POST",
                                 datatype:"JSON",

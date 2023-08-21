@@ -10,7 +10,7 @@
   <!-- /.login-logo -->
   <div class="card">
     <div class="card-body login-card-body">
-    	<form data-validation="true" action="../private/controllers/admin_login.php" name="frmAdminUsrLogin" id="frmAdminUsrLogin" method="POST">	
+    	<form data-validation="true" action="./private/controllers/admin_login.php" name="frmAdminUsrLogin" id="frmAdminUsrLogin" method="POST">	
         <div class="input-group mb-3"  id="input-group-error">
           <input type="text" name="userName" id="userName" class="form-control" placeholder="User Name">
           <div class="input-group-append">

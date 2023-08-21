@@ -4,6 +4,12 @@ function eventState(countryId, cityId, stateId) {
         cache: false,
         type: "POST",
         data: {countryId : countryId, stateSelId : stateId},
+        beforeSend: function() {
+            $('#stateSpinnerDiv').show();
+        },
+        complete: function(){
+            $('#stateSpinnerDiv').hide();
+        },
         success: function(html){
             $("#eventStateDiv").html(html);
             eventCity(cityId, stateId);
@@ -17,6 +23,12 @@ function eventCity(cityId, stateId) {
         cache: false,
         type: "POST",
         data: {cityId : cityId, stateId : stateId},
+        beforeSend: function() {
+            $('#citySpinnerDiv').show();
+        },
+        complete: function(){
+            $('#citySpinnerDiv').hide();
+        },
         success: function(html){
             $("#eventCityDiv").html(html);
         }
@@ -29,6 +41,12 @@ function eventCategory(categoryId) {
         cache: false,
         type: "POST",
         data: {categoryId : categoryId},
+        beforeSend: function() {
+            $('#categorySpinnerDiv').show();
+        },
+        complete: function(){
+            $('#categorySpinnerDiv').hide();
+        },
         success: function(html){
             $("#eventCategoryDiv").html(html);
         }
@@ -42,6 +60,12 @@ function eventSubCategory(categoryId, subCategoryId) {
         cache: false,
         type: "POST",
         data: {categoryId : categoryId, subCategoryId : subCategoryId },
+        beforeSend: function() {
+            $('#subCategorySpinnerDiv').show();
+        },
+        complete: function(){
+            $('#subCategorySpinnerDiv').hide();
+        },
         success: function(html){
             $("#eventSubCategoryDiv").append(html);
         }

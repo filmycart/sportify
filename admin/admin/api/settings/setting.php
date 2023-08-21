@@ -1,10 +1,12 @@
-<?php require_once('../../../private/init.php'); ?>
+<?php require_once('../../private/init.php'); ?>
 <?php
 
 $response = new Response();
 $errors = new Errors();
 
 if(Helper::is_post()){
+    echo "ddfddgdg";
+    exit;
     $api_token = Helper::post_val("api_token");
     if($api_token){
         $setting = new Setting();
