@@ -1,4 +1,4 @@
-<?php require_once('../private/init.php'); ?>
+<?php require_once('./private/init.php'); ?>
 <?php
 	$allCategory = array();
     $category = new Category();

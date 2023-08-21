@@ -10,7 +10,7 @@
 	}*/
 ?>
 <?php 
-  require_once('../private/init.php'); 
+  require_once('./private/init.php'); 
 
   $errors = Session::get_temp_session(new Errors());
   $admin = Session::get_session(new Admin());

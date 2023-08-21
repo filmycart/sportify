@@ -1,5 +1,5 @@
 <?php 
-	require_once('../private/init.php'); 
+	require_once('./private/init.php'); 
 ?>
 <?php
 	$admin = Session::get_session(new Admin());

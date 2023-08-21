@@ -20,12 +20,89 @@
         $pgEventAction = $_POST['eventAction'];
     }
 
+    $pgEventFileName = "";
+    if((isset($_POST["eventFileName"])) && (!empty($_POST["eventFileName"]))) {
+        $pgEventFileName = $_POST['eventFileName'];
+    }    
+
     $viewEventArray = array();
     if((Helper::is_get()) && (!empty($pgEventId)) && ($pgEventAction == "edit")) {
         $viewEvent->id = $pgEventId;
         $viewEventArray = (array) $viewEvent->where(["id" => $viewEvent->id])->andwhere(["admin_id" => $admin->id])->one();
         echo json_encode($viewEventArray);
         exit;
+    }
+
+    if((Helper::is_post()) && ($pgEventAction == "deleteEventImg")) {
+        
+        $errorArrayDel = array();
+
+        //Upload Location
+        $upload_location = "../../uploads/events/";
+
+        if(file_exists($upload_location.$pgEventFileName)) {
+            //Delete Uploaded File Delete
+            unlink($upload_location.$pgEventFileName);
+        } else {
+            $errorArrayDel['noFile'] = "Error: File does not exist.";
+        }    
+
+        echo json_encode($errorArrayDel);
+        die; 
+    }
+
+    if((Helper::is_post()) && ($pgEventAction == "upload")) {
+        //Count total files
+        $countfiles = count($_FILES['files']['name']);
+
+        //Upload Location
+        $upload_location = "../../uploads/events/";
+        $newfile = "";
+
+        //To store uploaded files path
+        $filesArray = $errorArray = array();
+
+        $eventTitle = "";
+        if((isset($_POST['eventTitle'])) && (!empty($_POST['eventTitle']))) {
+            $eventTitle = strtolower($_POST['eventTitle']);
+        }
+
+        //Loop all files
+        for($index = 0;$index < $countfiles;$index++) {
+             if(isset($_FILES['files']['name'][$index]) && $_FILES['files']['name'][$index] != '') {
+                   //FileName
+                   $filename = $_FILES['files']['name'][$index];
+
+                   //GetExtension
+                   $ext = strtolower(pathinfo($filename, PATHINFO_EXTENSION));
+
+                   //Valid Image Extension
+                   $valid_ext = array("png","jpeg","jpg");
+                   $newfile = $eventTitle."_".rand().".".$ext; 
+
+                   //Check Extension
+                   if(!in_array($ext, $valid_ext)) {
+                        $errorArray['eventImageInvalid'] = "Error: Invalid file format upload only files with format png, jpeg ,jpg.";
+                        echo json_encode($errorArray);
+                        die;
+                   } elseif(in_array($ext, $valid_ext)) {
+                        //File Path
+                        $path = $upload_location.$filename;
+
+                        if(!file_exists($upload_location.$newfile)) {
+                            //Upload File
+                            if(move_uploaded_file($_FILES['files']['tmp_name'][$index], $upload_location.$newfile)) {
+                                $errorArray['eventImage'][] = $newfile;
+                            } else {
+                                $errorArray['eventImageUploadDup'] = "Error: Image already exist.";
+                            }
+                        }
+                   }
+             }
+        }
+
+        echo json_encode($errorArray);
+        die;
     }
 
     if(empty($admin)){
@@ -47,6 +124,8 @@
                 $event->status = (isset($_POST['status'])) ? 1 : 1;
                 $event->admin_id = $admin->id;
                 $event->category_id = $_POST['eventCategory'];
+                $event->image_name = $_POST['eventFileHidden'];
+
                 $event->sub_category_id = ((isset($_POST['eventSubCategory'])) && (!empty($_POST['eventSubCategory'])))?$_POST['eventSubCategory']:'';
                 //$event->validate_except(["id", "image_resolution", "sell", "group_by"]);
                 $errors = $event->get_errors();
@@ -103,7 +182,6 @@
                     Session::set_session($errors);
                     Helper::redirect_to("../../".ADMIN_FOLER_NAME."/event-form.php");
                 }
-
             } elseif((!empty($pgEventId)) && ($pgEventAction == "update")) {
                 $event->id = $pgEventId;
                 $event->title = trim($_POST['eventTitle']);
@@ -117,6 +195,8 @@
                 $event->admin_id = $admin->id;
                 $event->category_id = ((isset($_POST['eventCategory'])) && (!empty($_POST['eventCategory'])))?$_POST['eventCategory']:'';
                 $event->sub_category_id = ((isset($_POST['eventSubCategory'])) && (!empty($_POST['eventSubCategory'])))?$_POST['eventSubCategory']:'';
+                $event->image_name = $_POST['eventFileHidden'];
+
                 //$event->validate_except(["id", "image_resolution", "sell", "group_by"]);
                 $errors = $event->get_errors();
                 //$event->validate_except(["image_name", "image_resolution", "sell", "group_by"]);
