@@ -78,8 +78,8 @@
 
                    //Valid Image Extension
                    $valid_ext = array("png","jpeg","jpg");
-                   $newfile = $eventTitle."_".rand().".".$ext; 
-
+                   //$newfile = $eventTitle."_".rand().".".$ext; 
+                   $newfile = rand().".".$ext; 
                    //Check Extension
                    if(!in_array($ext, $valid_ext)) {
                         $errorArray['eventImageInvalid'] = "Error: Invalid file format upload only files with format png, jpeg ,jpg.";
@@ -123,9 +123,9 @@
                 $event->end_date = trim($_POST['eventEndDate']);
                 $event->status = (isset($_POST['status'])) ? 1 : 1;
                 $event->admin_id = $admin->id;
-                $event->type_id = ((isset($_POST['eventType'])) && (!empty($_POST['eventType'])))?implode(",",$_POST['eventCategory']):'';
+                $event->type_id = ((isset($_POST['eventType'])) && (!empty($_POST['eventType'])))?$_POST['eventType']:'';
                 $event->category_id = ((isset($_POST['eventCategoryHidden'])) && (!empty($_POST['eventCategoryHidden'])))?implode(",",$_POST['eventCategory']):'';
-                $event->category_type_id = ((isset($_POST['eventCategoryType'])) && (!empty($_POST['eventCategoryType'])))?implode(",",$_POST['eventCategory']):'';
+                $event->category_type_id = ((isset($_POST['eventCategoryType'])) && (!empty($_POST['eventCategoryType'])))?$_POST['eventCategoryType']:'';
                 $event->image_name = $_POST['eventFileHidden'];
                 $event->sub_category_id = ((isset($_POST['eventSubCategory'])) && (!empty($_POST['eventSubCategory'])))?$_POST['eventSubCategory']:'';
                 //$event->validate_except(["id", "image_resolution", "sell", "group_by"]);

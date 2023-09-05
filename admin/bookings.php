@@ -21,16 +21,21 @@
 
     if(!empty($admin)){
 
-        $events = new Event();
+        $bookings = new Bookings();
         $category = new Category();
+        $events = new Event();
+        $user = new User();
 
         $sort_by = "id";
         $sort_type = "desc";
-        //$all_events = (array) $events->orderBy('id')->orderType('desc')->all();
-        $all_events = $events->where(["admin_id" => $admin->id])
+        $all_bookings = (array) $bookings->orderBy('id')->orderType('desc')->all();
+        /*$all_bookings = $bookings->where(["admin_id" => $admin->id])
                             //->like(["title" => $search])->like(["tags" => $search])->search()
                             ->orderBy($sort_by)->orderType($sort_type)->all();
-                            //->limit($start, BACKEND_PAGINATION)->all();
+                            //->limit($start, BACKEND_PAGINATION)->all();*/
+
+        $all_events = $events->where(["admin_id" => $admin->id])
+                            ->orderBy($sort_by)->orderType($sort_type)->all(); 
 
         $all_category = $category->where(["admin_id" => $admin->id])
                             ->orderBy($sort_by)->orderType($sort_type)->all();    
@@ -40,7 +45,30 @@
             foreach($all_category as $category_val) {
                 $eventCategory[$category_val->id] = $category_val; 
             }
-        }
+        }                        
+
+        $displayEvent = array();
+        if(!empty($all_events)) {
+            foreach($all_events as $event_val) {
+                $displayEvent[$event_val->id] = $event_val; 
+            }
+        }      
+
+        $all_user = $user->orderBy($sort_by)->orderType($sort_type)->all();    
+
+        $eventUser = array();
+        if(!empty($all_user)) {
+            foreach($all_user as $user_val) {
+                $eventUser[$user_val->id] = $user_val; 
+            }
+        }       
+
+        $displayEvent = array();
+        if(!empty($all_events)) {
+            foreach($all_events as $event_val) {
+                $displayEvent[$event_val->id] = $event_val; 
+            }
+        }              
 
         $all_products = new Product();
         $pagination = "";
@@ -221,7 +249,7 @@
           <div class="col-sm-12">
             <ol class="breadcrumb float-sm-left">
               <li class="breadcrumb-item"><a href="index.php">Home</a></li>
-              <li class="breadcrumb-item active">Events</li>
+              <li class="breadcrumb-item active">Bookings</li>
             </ol>
           </div>
         </div>
@@ -237,7 +265,7 @@
               <div class="card-header">
                 <div style="width:100%;float:left;">
                     <div style="width:30%;float:left;">
-                        <h3 class="card-title">Events</h3>
+                        <h3 class="card-title">Bookings</h3>
                     </div>  
                     <div style="width:9%;float:right;">  
                         <a href="#" data-toggle="modal" data-target="#event-form-modal" class="btn btn-primary btn-sm" onclick="addEditEvent('create','','101','4183','35','','37','171','174')">Add Event</a>
@@ -428,33 +456,41 @@
                   <thead>
                     <tr>
                         <th>ID</th>
-                        <th>Title</th>
+                        <th>Event</th>
                         <th>Category</th>
-                        <th>Venue</th>
-                        <th>Start Date</th>
-                        <th>End Date</th>
+                        <th>Booked By</th>
                         <th>Status</th>
                         <th>Action</th>
                     </tr>
                   </thead>
                   <tbody>
                     <?php 
-                        if(count($all_events) > 0){
-                            foreach ($all_events as $item){ 
+                        if(count($all_bookings) > 0) {
+                            foreach ($all_bookings as $item){ 
                     ?>
                               <tr>
-                                <!-- <td>
-                                    <img class="p-15" src="<?php echo UPLOADED_FOLDER . DIRECTORY_SEPARATOR . UPLOADED_THUMB_FOLDER . DIRECTORY_SEPARATOR . $item->image_name; ?>" alt="image" />
-                                </td> -->
                                 <td>
                                     <?php echo $item->id; ?>
                                 </td>
+                                <?php 
+                                    $current_event = $eventDisp = "";
+                                    $eventId = $item->event_id;
+                                    if(!empty($eventId)) {
+                                        if((isset($all_events[$eventId]->title)) && (!empty($all_events[$eventId]->title))) {
+                                            $eventDisp = $all_events[$eventId]->title; 
+                                            $event_param = $url_current . "id=" . $eventId;
+                                            $current_event .= "<div style='border:0px solid red;float:left;width:100%;'><div style='border:0px solid red;float:left;width:50%;'><a href='" . $event_param . "'>" . $eventDisp . "</a></div></div>";
+                                        }                                        
+                                    } else {
+                                        $current_event = "Unknown";
+                                    }
+                                ?>
                                 <td>
-                                    <a href="#" data-toggle="modal" data-target="#event-form-modal" onclick="addEditEvent('edit','<?php echo $item->id; ?>','<?php echo $item->country_id; ?>','<?php echo $item->city_id; ?>','<?php echo $item->state_id; ?>','<?php echo $item->category_id; ?>','<?php echo $item->sub_category_id; ?>','<?php echo $item->type_id; ?>','<?php echo $item->category_type_id; ?>')"><?php echo $item->title; ?></a>
+                                    <?php echo $current_event; ?>
                                 </td>
                                 <?php 
                                     $current_category = $eventDispCat = "";
-                                    $eventCategoryIdArray = explode(",",$item->category_id);
+                                    /*$eventCategoryIdArray = explode(",",$item->category_id);
                                     if(!empty($eventCategoryIdArray)) {
                                         foreach($eventCategoryIdArray as $eventCategoryIdVal) {
                                             if((isset($eventCategory[$eventCategoryIdVal]->title)) && (!empty($eventCategory[$eventCategoryIdVal]->title))) {
@@ -465,43 +501,32 @@
                                         }
                                     } else {
                                         $current_category = "Unknown";
-                                    }
+                                    }*/
                                 ?>
                                 <td>
                                     <?php echo $current_category; ?>
                                 </td>
+                                <?php 
+                                    $current_user = $eventDispUsr = "";
+                                    $eventUserId = $item->user;
+                                    if(!empty($eventUserId)) {
+                                        if((isset($eventUser[$eventUserId]->email)) && (!empty($eventUser[$eventUserId]->email))) {
+                                            $eventDispUsr = $eventUser[$eventUserId]->email; 
+                                            $usr_param = $url_current . "user=" . $eventUserId;
+                                            $current_category .= "<div style='border:0px solid red;float:left;width:100%;'><div style='border:0px solid red;float:left;width:50%;'><a href='" . $usr_param . "'>" . $eventDispUsr . "</a></div></div>";
+                                        }
+                                    } else {
+                                        $current_user = "Unknown";
+                                    }
+                                ?>
                                 <td>
-                                    <?php 
-                                        $address = "";
-                                        if((isset($item->address)) && (!empty($item->address))){
-                                            $address = $item->address;
-                                        }     
-                                    ?>
-                                    <?php echo $address; ?>
-                                </td>
-                                <td>
-                                    <?php 
-                                        $startDate = "";
-                                        if((isset($item->start_date)) && (!empty($item->start_date))){
-                                            $startDate = date("d/m/Y h:i:s A",strtotime($item->start_date));
-                                        }     
-                                    ?>
-                                    <?php echo $startDate; ?>
-                                </td>
-                                <td>
-                                    <?php 
-                                        $endDate = "";
-                                        if((isset($item->end_date)) && (!empty($item->end_date))){
-                                            $endDate = date("d/m/Y h:i:s A",strtotime($item->end_date));
-                                        }     
-                                    ?>
-                                    <?php echo $endDate; ?>
+                                    <?php echo $eventDispUsr; ?>
                                 </td>
                                 <td>
                                     <?php 
                                         $status_class = "";
                                         $status = "In-Active";
-                                        if($item->status == 1){
+                                        if($item->status == 1) {
                                             $status_class = "active";
                                             $status = "Active";
                                         }     
@@ -509,8 +534,9 @@
                                     <span class="table-status <?php echo $status_class; ?>"><?php echo $status; ?></span>
                                 </td>
                                 <td>
-                                    <a href="#" data-toggle="modal" data-target="#event-form-modal" onclick="addEditEvent('edit','<?php echo $item->id; ?>','<?php echo $item->country_id; ?>','<?php echo $item->city_id; ?>','<?php echo $item->state_id; ?>','<?php echo $item->category_id; ?>','<?php echo $item->sub_category_id; ?>','<?php echo $item->type_id; ?>','<?php echo $item->category_type_id; ?>')"><i class="ion-compose"></i></a>
-                                    <a href="#" data-toggle="modal" data-target="#del-event-form-modal" onclick="deleteEvent('delete','<?php echo $item->id; ?>','<?php echo $item->admin_id; ?>')"><i class="ion-trash-a"></i></a>
+                                    &nbsp;
+                                    <!-- <a href="#" data-toggle="modal" data-target="#event-form-modal" onclick="addEditEvent('edit','<?php echo $item->id; ?>','<?php echo $item->country_id; ?>','<?php echo $item->city_id; ?>','<?php echo $item->state_id; ?>','<?php echo $item->category_id; ?>','<?php echo $item->sub_category_id; ?>','<?php echo $item->type_id; ?>','<?php echo $item->category_type_id; ?>')"><i class="ion-compose"></i></a>
+                                    <a href="#" data-toggle="modal" data-target="#del-event-form-modal" onclick="deleteEvent('delete','<?php echo $item->id; ?>','<?php echo $item->admin_id; ?>')"><i class="ion-trash-a"></i></a> -->
                                 </td>
                               </tr>
                   <?php 
@@ -521,11 +547,9 @@
                   <tfoot>
                     <tr>
                         <th>ID</th>
-                        <th>Title</th>
+                        <th>Event</th>
                         <th>Category</th>
-                        <th>Venue</th>
-                        <th>Start Date</th>
-                        <th>End Date</th>
+                        <th>Booked By</th>
                         <th>Status</th>
                         <th>Action</th>
                     </tr>
@@ -772,7 +796,7 @@
                 alert("You have selected : "+eventCategorySelMultiValues);
             });*/
 
-            function addEditEvent(eventAction, eventId, countryId, cityId, stateId, categoryId, subCategoryId, eventTypeId, categoryTypeId) {
+            function addEditBooking(bookingAction, bookingId) {
 
                 $("#eventImagePreview").html('');
                 $("#eventSucResponseDiv").html('');
@@ -790,12 +814,12 @@
                 eventSubCategory(categoryId, subCategoryId);
                 eventCategoryType(categoryId, eventTypeId, categoryTypeId);
 
-                if(eventAction == "edit") {
-                    eventImage(eventId);
+                if(bookingAction == "edit") {
+                    eventImage(bookingId);
                 }
 
                 var formData = {};
-                if(eventAction == "create") {
+                if(bookingAction == "create") {
                     $("#eventAction").val(eventAction);
                     $('#modal-title-text').text('Add Event');
                     $("#eventId").val('');
@@ -804,17 +828,17 @@
                     $("#eventStartDate").val('');
                     $("#eventEndDate").val('');
                     $("#eventVenue").val('');
-                } else if(eventAction == "edit") {
+                } else if(bookingAction == "edit") {
                     $("#eventAction").val(eventAction);
                     $('#modal-title-text').text('Update Event');
                     formData = {
                         "eventId": eventId,
-                        "eventAction": eventAction
+                        "bookingAction": bookingAction
                     };
-                } else if(eventAction == "delete") {
+                } else if(bookingAction == "delete") {
                     formData = {
                         "eventId": eventId,
-                        "eventAction": eventAction
+                        "bookingAction": bookingAction
                     };
                 }           
 
