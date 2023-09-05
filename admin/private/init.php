@@ -85,6 +85,7 @@
 	require_once('models/Admin_Address.php');
 	require_once('models/Orders.php');
 	require_once('models/Ordered_Product.php');
+	require_once('models/Bookings.php');
 	require_once('models/Cart.php');
 	require_once('models/Review_Image.php');
 	require_once('models/Item_Image.php');

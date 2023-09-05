@@ -31,16 +31,6 @@
   $admin = Session::get_session(new Admin());
   $siteConfig = Session::get_session(new Site_Config());
 ?>
-<!-- <div class="sidebar">
-    <ul class="sidebar-list">
-        <li class="<?php echo (!empty($index)?$index:''); ?>"><a href="index.php"><i class="ion-ios-pie"></i><span>Dashboard</span></a></li>
-        <li class="<?php echo (!empty($events)?$events:''); ?>"><a href="events.php"><i class="ion-android-apps"></i><span>Event</span></a></li>
-        <li class="<?php echo (!empty($categories)?$categories:''); ?>"><a href="categories.php"><i class="ion-social-buffer"></i><span>Category</span></a></li>
-        <li class="<?php echo (!empty($sub_categories)?$sub_categories:'');; ?>"><a href="sub-categories.php"><i class="ion-android-apps"></i><span>Sub Category</span></a></li>
-        <li class="<?php echo (!empty($cms_page)?$cms_page:''); ?>"><a href="cms.php"><i class="ion-android-apps"></i><span>Cms</span></a></li>
-        <li class="<?php echo (!empty($site_config)?$site_config:''); ?>"><a href="site-config.php"><i class="ion-settings"></i><span>Configuration</span></a></li>
-    </ul>
-</div> -->
 <!-- Main Sidebar Container -->
   <aside class="main-sidebar sidebar-dark-primary elevation-4">
     <!-- Brand Logo -->
@@ -73,7 +63,7 @@
       <!-- Sidebar Menu -->
       <nav class="mt-2">
         <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
-          <li class="nav-item">
+          <!-- <li class="nav-item">
             <a href="#" class="nav-link">
               <i class="nav-icon fas fa-edit"></i>
               <p>
@@ -107,7 +97,7 @@
                 </a>
               </li>
             </ul>
-          </li>
+          </li> -->
           <li class="nav-item">
             <a href="#" class="nav-link">
               <i class="nav-icon fas fa-table"></i>
@@ -117,28 +107,33 @@
               </p>
             </a>
             <ul class="nav nav-treeview">
-            <!-- <li class="nav-item">
-                <a href="pages/tables/simple.html" class="nav-link">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>Simple Tables</p>
-                </a>
-              </li> -->
               <li class="nav-item">
                 <a href="events.php" class="nav-link">
                   <i class="far fa-circle nav-icon"></i>
-                  <p>Events</p>
+                  <p>List</p>
                 </a>
                 <!-- <a href="event-form.php" class="nav-link">
                   <i class="far fa-circle nav-icon"></i>
                   <p>Add Event</p>
                 </a> -->
               </li>
-              <!-- <li class="nav-item">
-                <a href="pages/tables/jsgrid.html" class="nav-link">
+            </ul>
+          </li>
+          <li class="nav-item">
+            <a href="#" class="nav-link">
+              <i class="nav-icon fas fa-table"></i>
+              <p>
+                Booking
+                <i class="fas fa-angle-left right"></i>
+              </p>
+            </a>
+            <ul class="nav nav-treeview">
+              <li class="nav-item">
+                <a href="bookings.php" class="nav-link">
                   <i class="far fa-circle nav-icon"></i>
-                  <p>jsGrid</p>
+                  <p>List</p>
                 </a>
-              </li> -->
+              </li>
             </ul>
           </li>          
         </ul>

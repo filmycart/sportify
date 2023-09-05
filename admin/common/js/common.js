@@ -87,7 +87,25 @@ function eventCategory(categoryId, eventTypeId) {
             $("#eventCategoryDiv").html(html);
         }
     });
-} 
+}
+
+function eventImage(eventId) {
+    $.ajax({
+        url: "event-images.php",
+        cache: false,
+        type: "POST",
+        data: {eventId: eventId},
+        beforeSend: function() {
+            $('#evenFileSpinnerDiv').show();
+        },
+        complete: function(){
+            $('#evenFileSpinnerDiv').hide();
+        },
+        success: function(html){
+            $("#eventImagePreview").html(html);
+        }
+    });
+}  
 
 function eventSubCategory(categoryId, subCategoryId) {
     var parentCategoryId = $("#eventCategory").val();
